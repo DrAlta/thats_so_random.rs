@@ -107,9 +107,9 @@ impl Pcg32 {
     }
 
     pub fn random_range<T>(&mut self, low: T, high : T) -> T 
-    where Self: Rando<T>
+    where Self: RandoRange<T>
     {
-        Rando::<T>::random_range(self, low, high)
+        RandoRange::<T>::random_range(self, low, high)
 
     }
     pub fn random_range_i32(&mut self, start: i32, end : i32) -> i32 {
@@ -125,6 +125,8 @@ impl Pcg32 {
 
 pub trait Rando<T> {
     fn random(&mut self) -> T;
+}
+pub trait RandoRange<T> {
     fn random_range(&mut self, low: T, high: T) -> T;
 }
 
@@ -132,7 +134,8 @@ impl Rando<i32> for Pcg32 {
     fn random(&mut self) -> i32 {
         (self.next_u32() % i32::MAX as u32) as i32
     }
-
+}
+impl RandoRange<i32> for Pcg32 {
     fn random_range(&mut self, low: i32, high: i32) -> i32 {
         (self.next_u32() % i32::MAX as u32) as i32 % (high - low) + low
     }
@@ -140,8 +143,9 @@ impl Rando<i32> for Pcg32 {
 impl Rando<u32> for Pcg32 {
     fn random(&mut self) -> u32 {
         self.next_u32()
-     }
-    
+    }
+}
+impl RandoRange<u32> for Pcg32 {
     fn random_range(&mut self, low: u32, high: u32) -> u32 {
         (self.next_u32() % (high - low)) + low
     }
@@ -150,11 +154,10 @@ impl Rando<f64> for Pcg32{
     fn random(&mut self) -> f64 {
         self.next_u32() as f64 / u32::MAX as f64
     }
-
+}
+impl RandoRange<f64> for Pcg32{
     fn random_range(&mut self, low: f64, high: f64) -> f64 {
         let diff = high - low;
         low + ( diff * self.random::<f64>())
     }
 }
- 
-
