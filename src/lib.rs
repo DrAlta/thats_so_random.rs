@@ -1,8 +1,10 @@
 
+pub const DEFAULT_STATE:u64 = 0xcafef00dd15ea5e5;
+pub const DEFAULT_STREAM:u64 = 0xa02bdbf7bb3c0a7;
 // This is the default multiplier used by PCG for 64-bit state.
 const MULTIPLIER: u64 = 6364136223846793005;
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde1", derive(Serialize, Deserialize))]
 pub struct Pcg32 {
     state: u64,
@@ -105,20 +107,26 @@ impl Pcg32 {
         let y = u64::from(self.next_u32());
         (y << 32) | x
     }
-
-    pub fn random_range<T>(&mut self, low: T, high : T) -> T 
-    where Self: RandoRange<T>
-    {
-        RandoRange::<T>::random_range(self, low, high)
-
-    }
-    pub fn random_range_i32(&mut self, start: i32, end : i32) -> i32 {
-        (self.next_u32() as i32 % (end - start)) + start
-    }
     pub fn random<T>(&mut self) -> T 
     where Self: Rando<T>
     {
         Rando::<T>::random(self)
+
+    }
+    pub fn random_item<T>(&mut self, vec: &mut Vec<T>) -> Option<T> {
+        if vec.is_empty() {
+            return None
+        }
+        Some(vec.remove(
+            (
+                self.next_u64() % usize::MAX as u64
+            ) as usize % vec.len()
+        ))
+    }
+    pub fn random_range<T>(&mut self, low: T, high : T) -> T 
+    where Self: RandoRange<T>
+    {
+        RandoRange::<T>::random_range(self, low, high)
 
     }
 }
