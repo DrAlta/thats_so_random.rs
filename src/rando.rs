@@ -4,12 +4,15 @@ pub trait Rando<T> {
     fn random(&mut self) -> T;
 }
 
-const I32_MAX: u32 = i32::MAX as u32; 
+const I32_MAX: u32 = i32::MAX as u32 - 1; 
 impl Rando<i32> for Pcg32 {
     fn random(&mut self) -> i32 {
         let x = self.next_u32();
-        if x > I32_MAX {
-            0 - (( x - I32_MAX) as i32)
+        if x == u32::MAX {
+            return i32::MIN
+        }
+        if x >= I32_MAX {
+            -1 - (( x - I32_MAX) as i32)
         } else {
             x as i32
         }
@@ -22,12 +25,12 @@ impl Rando<u32> for Pcg32 {
     }
 }
 
-const I64_MAX: u64 = i64::MAX as u64; 
+const I64_MAX: u64 = i64::MAX as u64 - 1; 
 impl Rando<i64> for Pcg32 {
     fn random(&mut self) -> i64 {
         let x = self.next_u64();
-        if x > I64_MAX {
-            0 - (( x - I64_MAX) as i64)
+        if x >= I64_MAX {
+            -1 - (( x - I64_MAX) as i64)
         } else {
             x as i64
         }
