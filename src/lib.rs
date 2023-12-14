@@ -9,11 +9,15 @@ use rando::Rando;
 mod rando_range;
 use rando_range::RandoRange;
 
+/// The default state for the PCG32 generator.
 pub const DEFAULT_STATE:u64 = 0xcafef00dd15ea5e5;
+/// The default stream for the PCG32 generator.
 pub const DEFAULT_STREAM:u64 = 0xa02bdbf7bb3c0a7;
+
 // This is the default multiplier used by PCG for 64-bit state.
 const MULTIPLIER: u64 = 6364136223846793005;
 
+/// PCG32 - A 32-bit Pseudo-Random Number Generator.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde1", derive(Serialize, Deserialize))]
 pub struct Pcg32 {
@@ -74,6 +78,11 @@ impl Pcg32 {
         Pcg32::from_state_incr(state, increment)
     }
 
+
+
+    // Other methods...
+
+    /// Get the next 32-bit unsigned random number.
     #[inline]
     fn from_state_incr(state: u64, increment: u64) -> Self {
         let mut pcg = Pcg32 { state, increment };
@@ -110,6 +119,7 @@ impl Pcg32 {
 }
 /// more advance functions
 impl Pcg32 {
+    /// Generate a random number from a Gaussian distribution.
     pub fn gaussian_distribution<T>(&mut self, mu: T, sigme: T) -> T
     where Self: GaussianDistribution<T>
     {
@@ -123,18 +133,25 @@ impl Pcg32 {
         let y = u64::from(self.next_u32());
         (y << 32) | x
     }
+
+    /// Generate a random number from a normal distribution.
     pub fn normal_distribution<T>(&mut self) -> T 
     where Self: NormalDistribution<T>
     {
         NormalDistribution::<T>::normal_distribution(self)
 
     }
+     /// Generate a random number.
+     /// floats are between 0.0 and 1.0
+     /// integers are be T::MIN and T::MAX
     pub fn random<T>(&mut self) -> T 
     where Self: Rando<T>
     {
         Rando::<T>::random(self)
 
     }
+
+    /// Remove and return a random item from a vector.
     pub fn random_item<T>(&mut self, vec: &mut Vec<T>) -> Option<T> {
         if vec.is_empty() {
             return None
@@ -145,6 +162,8 @@ impl Pcg32 {
             ) as usize % vec.len()
         ))
     }
+
+    /// Generate a random number within a specified range.
     pub fn random_range<T>(&mut self, low: T, high : T) -> T 
     where Self: RandoRange<T>
     {
