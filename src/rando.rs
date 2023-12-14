@@ -41,22 +41,22 @@ impl Rando<f64> for Pcg32{
 }
 
 ////
-const I32_PENULTIMATE: u32 = i32::MAX as u32 - 1; 
+const I32_MAX: u32 = i32::MAX as u32; 
 fn u32_to_i32(x:u32) -> i32 {
     if x == u32::MAX {
         return i32::MIN
     }
-    if x >= I32_PENULTIMATE {
-        -1 - (( x - I32_PENULTIMATE) as i32)
+    if x > I32_MAX {
+        -1 - (( x - I32_MAX - 1) as i32)
     } else {
         x as i32
     }
 
 }
-const I64_PENULTIMATE: u64 = i64::MAX as u64 - 1; 
+const I64_Max: u64 = i64::MAX as u64; 
 fn u64_to_i64(x:u64) -> i64 {
-    if x >= I64_PENULTIMATE {
-        -1 - (( x - I64_PENULTIMATE) as i64)
+    if x > I64_Max {
+        -1 - (( x - I64_Max - 1) as i64)
     } else {
         x as i64
     }
@@ -67,24 +67,10 @@ mod tests {
 
     #[test]
     fn u32_to_i32_test(){
-        let mut idx: u32 = u32::MAX - 100;
-        loop {
-            u32_to_i32(idx);
-            if idx == u32::MAX {
-                return
-            }
-            idx += 1;
-        }
+        assert_eq!(i32::MIN , u32_to_i32(u32::MAX));
     }
     #[test]
     fn u64_to_i64_test(){
-        let mut idx: u64 = u64::MAX - 100;
-        loop {
-            u64_to_i64(idx);
-            if idx == u64::MAX {
-                return
-            }
-            idx += 1;
-        }
+        assert_eq!(i64::MIN, u64_to_i64(u64::MAX));
     }
 }
