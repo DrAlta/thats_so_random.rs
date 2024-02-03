@@ -53,10 +53,10 @@ fn u32_to_i32(x:u32) -> i32 {
     }
 
 }
-const I64_Max: u64 = i64::MAX as u64; 
+const I64_MAX: u64 = i64::MAX as u64; 
 fn u64_to_i64(x:u64) -> i64 {
-    if x > I64_Max {
-        -1 - (( x - I64_Max - 1) as i64)
+    if x > I64_MAX {
+        -1 - (( x - I64_MAX - 1) as i64)
     } else {
         x as i64
     }

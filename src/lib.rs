@@ -152,7 +152,7 @@ impl Pcg32 {
     }
 
     /// Remove and return a random item from a vector.
-    pub fn random_item<T>(&mut self, vec: &mut Vec<T>) -> Option<T> {
+    pub fn remove_random_item<T>(&mut self, vec: &mut Vec<T>) -> Option<T> {
         if vec.is_empty() {
             return None
         }
@@ -162,6 +162,19 @@ impl Pcg32 {
             ) as usize % vec.len()
         ))
     }
+
+
+    pub fn get_random_item<'a, 'b, T>(&'a mut self, vec: &'b mut Vec<T>) -> Option<&'b T> {
+        if vec.is_empty() {
+            return None
+        }
+        vec.get(
+            (
+                self.next_u64() % usize::MAX as u64
+            ) as usize % vec.len()
+        )
+    }
+
 
     /// Generate a random number within a specified range.
     pub fn random_range<T>(&mut self, low: T, high : T) -> T 
