@@ -164,7 +164,7 @@ impl Pcg32 {
     }
 
 
-    pub fn get_random_item<'a, 'b, T>(&'a mut self, vec: &'b mut Vec<T>) -> Option<&'b T> {
+    pub fn get_random_item<'a, 'b, T>(&'a mut self, vec: &'b Vec<T>) -> Option<&'b T> {
         if vec.is_empty() {
             return None
         }
