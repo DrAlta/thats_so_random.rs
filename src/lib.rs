@@ -5,9 +5,9 @@ mod normal_distribution;
 use normal_distribution::NormalDistribution;
 
 mod rando;
-use rando::Rando;
+pub use rando::Rando;
 mod rando_range;
-use rando_range::RandoRange;
+pub use rando_range::RandoRange;
 
 /// The default state for the PCG32 generator.
 pub const DEFAULT_STATE:u64 = 0xcafef00dd15ea5e5;
