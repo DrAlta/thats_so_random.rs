@@ -1,6 +1,9 @@
+use std::u16;
+
 mod gaussian_distribution;
 use gaussian_distribution::GaussianDistribution;
-
+pub mod get_random_item;
+use get_random_item::GetRandomItem;
 mod normal_distribution;
 use normal_distribution::NormalDistribution;
 
@@ -8,6 +11,8 @@ mod rando;
 pub use rando::Rando;
 mod rando_range;
 pub use rando_range::RandoRange;
+pub mod remove_random_item;
+use remove_random_item::RemoveRandomItem;
 
 /// The default state for the PCG32 generator.
 pub const DEFAULT_STATE:u64 = 0xcafef00dd15ea5e5;
@@ -19,7 +24,7 @@ const MULTIPLIER: u64 = 6364136223846793005;
 
 /// PCG32 - A 32-bit Pseudo-Random Number Generator.
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[cfg_attr(feature = "serde1", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Pcg32 {
     state: u64,
     increment: u64,
@@ -134,6 +139,22 @@ impl Pcg32 {
         (y << 32) | x
     }
 
+    /// Implement `next_usize` via `next_u32`, little-endian order.
+    pub fn next_usize(&mut self) -> usize {
+        // Use LE; we explicitly generate one value before the next.
+        let x = self.next_u32();
+        let y = u64::from(self.next_u32());
+        let z = (y << 32) | u64::from(x);
+        if let Ok(thing) =usize::try_from(z) {
+            return thing;
+        }
+        if let Ok(thing) =usize::try_from(x) {
+            return thing;
+        }
+        usize::from((x % u16::MAX as u32) as u16 )
+
+    }
+
     /// Generate a random number from a normal distribution.
     pub fn normal_distribution<T>(&mut self) -> T 
     where Self: NormalDistribution<T>
@@ -152,27 +173,13 @@ impl Pcg32 {
     }
 
     /// Remove and return a random item from a vector.
-    pub fn remove_random_item<T>(&mut self, vec: &mut Vec<T>) -> Option<T> {
-        if vec.is_empty() {
-            return None
-        }
-        Some(vec.remove(
-            (
-                self.next_u64() % usize::MAX as u64
-            ) as usize % vec.len()
-        ))
+    pub fn remove_random_item<T, C:RemoveRandomItem<T>>(&mut self, collection: &mut C) -> Option<T> {
+        collection.remove_random_item(self)
     }
 
 
-    pub fn get_random_item<'a, 'b, T>(&'a mut self, vec: &'b Vec<T>) -> Option<&'b T> {
-        if vec.is_empty() {
-            return None
-        }
-        vec.get(
-            (
-                self.next_u64() % usize::MAX as u64
-            ) as usize % vec.len()
-        )
+    pub fn get_random_item<'a, 'b, T, C: GetRandomItem<'b, T>>(&'a mut self, collection: &'b C) -> Option<T> {
+        collection.get_random_item(self)
     }
 
 

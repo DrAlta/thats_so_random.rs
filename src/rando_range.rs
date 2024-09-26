@@ -20,3 +20,9 @@ impl RandoRange<f64> for Pcg32{
     }
 }
 
+impl RandoRange<usize> for Pcg32{
+    fn random_range(&mut self, low: usize, high: usize) -> usize {
+        (self.next_usize() % (high - low)) + low
+    }
+}
+
