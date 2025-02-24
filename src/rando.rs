@@ -1,40 +1,40 @@
-use super::Pcg32;
+use crate::RandomNumberGenerator;
 
 pub trait Rando<T> {
     fn random(&mut self) -> T;
 }
 
-impl Rando<i32> for Pcg32 {
+impl<T: RandomNumberGenerator> Rando<i32> for T {
     fn random(&mut self) -> i32 {
         u32_to_i32(self.next_u32())
     }
 }
 
 
-impl Rando<u32> for Pcg32 {
+impl<T: RandomNumberGenerator> Rando<u32> for T {
     fn random(&mut self) -> u32 {
         self.next_u32()
     }
 }
 
-impl Rando<i64> for Pcg32 {
+impl<T: RandomNumberGenerator> Rando<i64> for T {
     fn random(&mut self) -> i64 {
        u64_to_i64(self.next_u64())
     }
 }
 
-impl Rando<u64> for Pcg32{
+impl<T: RandomNumberGenerator> Rando<u64> for T {
     fn random(&mut self) -> u64 {
         self.next_u64()
     }
 }
 
-impl Rando<f32> for Pcg32{
+impl<T: RandomNumberGenerator> Rando<f32> for T{
     fn random(&mut self) -> f32 {
         self.next_u32() as f32 / u32::MAX as f32
     }
 }
-impl Rando<f64> for Pcg32{
+impl<T: RandomNumberGenerator> Rando<f64> for T{
     fn random(&mut self) -> f64 {
         self.next_u32() as f64 / u32::MAX as f64
     }

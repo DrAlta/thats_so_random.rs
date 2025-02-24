@@ -1,7 +1,9 @@
+use crate::RandomNumberGenerator;
+
 use super::GetRandomItem;
 
-impl<'a, T> GetRandomItem<'a, &'a T> for Vec<T> {
-    fn get_random_item(&'a self, rng:& mut crate::Pcg32) -> Option<&'a T> {
+impl<'a, T, R:RandomNumberGenerator> GetRandomItem<'a, &'a T, R> for Vec<T> {
+    fn get_random_item(&'a self, rng: &mut R) -> Option<&'a T> {
         if self.is_empty() {
             return None
         }

@@ -1,9 +1,11 @@
 use std::collections::HashMap;
 
+use crate::RandomNumberGenerator;
+
 use super::RemoveRandomItem;
 
-impl<K: Eq + std::hash::Hash + Clone, V> RemoveRandomItem<(K,V)> for HashMap<K,V> {
-    fn remove_random_item(&mut self, rng:&mut crate::Pcg32) -> Option<(K,V)> {
+impl<K: Eq + std::hash::Hash + Clone, V, R: RandomNumberGenerator> RemoveRandomItem<(K,V), R> for HashMap<K,V> {
+    fn remove_random_item(&mut self, rng:&mut R) -> Option<(K,V)> {
         if self.is_empty() {
             return None
         }

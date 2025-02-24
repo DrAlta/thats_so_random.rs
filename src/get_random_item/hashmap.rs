@@ -1,9 +1,11 @@
 use std::collections::HashMap;
 
+use crate::RandomNumberGenerator;
+
 use super::GetRandomItem;
 
-impl<'a, K: Eq + std::hash::Hash, V> GetRandomItem<'a, (&'a K, &'a V)> for HashMap<K,V> {
-    fn get_random_item(&self, rng:&mut crate::Pcg32) -> Option<(&K, &V)> {
+impl<'a, K: Eq + std::hash::Hash, V, R:RandomNumberGenerator> GetRandomItem<'a, (&'a K, &'a V), R> for HashMap<K,V> {
+    fn get_random_item(&self, rng:&mut R) -> Option<(&K, &V)> {
         if self.is_empty() {
             return None
         }

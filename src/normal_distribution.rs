@@ -1,10 +1,10 @@
-use super::Pcg32;
+use crate::RandomNumberGenerator;
 
 pub trait NormalDistribution<T>{
     fn normal_distribution(&mut self) -> T;
 }
 
-impl NormalDistribution<f32> for Pcg32 {
+impl<T: RandomNumberGenerator> NormalDistribution<f32> for T {
     fn normal_distribution(&mut self) -> f32 {
         let u1 = self.random();
         let u2: f32 = self.random();
@@ -12,7 +12,7 @@ impl NormalDistribution<f32> for Pcg32 {
     }
 }
 
-impl NormalDistribution<f64> for Pcg32 {
+impl<T: RandomNumberGenerator> NormalDistribution<f64> for T {
     fn normal_distribution(&mut self) -> f64 {
         let u1 = self.random();
         let u2: f64 = self.random();

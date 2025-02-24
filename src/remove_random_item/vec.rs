@@ -1,7 +1,9 @@
+use crate::RandomNumberGenerator;
+
 use super::RemoveRandomItem;
 
-impl<T> RemoveRandomItem<T> for Vec<T> {
-    fn remove_random_item(&mut self, rng:&mut crate::Pcg32) -> Option<T> {
+impl<T, R: RandomNumberGenerator> RemoveRandomItem<T, R> for Vec<T> {
+    fn remove_random_item(&mut self, rng:&mut R) -> Option<T> {
         if self.is_empty() {
             return None
         }

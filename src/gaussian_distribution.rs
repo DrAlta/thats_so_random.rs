@@ -1,16 +1,18 @@
-use super::Pcg32;
+use crate::{normal_distribution::NormalDistribution, RandomNumberGenerator};
 
 pub trait GaussianDistribution<T>{
     fn gaussian_distribution(&mut self, mu: T, sigme: T) -> T;
 }
 
-impl GaussianDistribution<f32> for Pcg32 {
+impl<T: RandomNumberGenerator> GaussianDistribution<f32> for T
+where T: NormalDistribution<f32> {
     fn gaussian_distribution(&mut self, mu: f32, sigme: f32) -> f32 {
-        (self.normal_distribution::<f32>() * sigme) + mu
+        (NormalDistribution::normal_distribution(self) * sigme) + mu
     }
 }
-impl GaussianDistribution<f64> for Pcg32 {
+impl<T: RandomNumberGenerator> GaussianDistribution<f64> for T 
+where T: NormalDistribution<f64>{
     fn gaussian_distribution(&mut self, mu: f64, sigme: f64) -> f64 {
-        (self.normal_distribution::<f64>() * sigme) + mu
+        (NormalDistribution::normal_distribution(self) * sigme) + mu
     }
 }
