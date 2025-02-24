@@ -1,3 +1,13 @@
+# [0.2.4] 2025-02-23
+
+## added
+
+- RandomNumberGenerator trait
+
+## changed
+
+- moved impls from Pcg32 to RandomNumberGenerator
+
 # [0.2.3] 2024-09-26
 
 ## added
