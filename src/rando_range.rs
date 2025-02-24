@@ -16,7 +16,7 @@ impl<T: RandomNumberGenerator> RandoRange<u32> for T {
 impl<T: RandomNumberGenerator> RandoRange<f64> for T {
     fn random_range(&mut self, low: f64, high: f64) -> f64 {
         let diff = high - low;
-        low + ( diff * self.random::<f64>())
+        low + (diff * self.random::<f64>())
     }
 }
 
@@ -25,4 +25,3 @@ impl<T: RandomNumberGenerator> RandoRange<usize> for T {
         (self.next_usize() % (high - low)) + low
     }
 }
-

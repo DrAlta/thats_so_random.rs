@@ -10,7 +10,6 @@ impl<T: RandomNumberGenerator> Rando<i32> for T {
     }
 }
 
-
 impl<T: RandomNumberGenerator> Rando<u32> for T {
     fn random(&mut self) -> u32 {
         self.next_u32()
@@ -19,7 +18,7 @@ impl<T: RandomNumberGenerator> Rando<u32> for T {
 
 impl<T: RandomNumberGenerator> Rando<i64> for T {
     fn random(&mut self) -> i64 {
-       u64_to_i64(self.next_u64())
+        u64_to_i64(self.next_u64())
     }
 }
 
@@ -29,34 +28,33 @@ impl<T: RandomNumberGenerator> Rando<u64> for T {
     }
 }
 
-impl<T: RandomNumberGenerator> Rando<f32> for T{
+impl<T: RandomNumberGenerator> Rando<f32> for T {
     fn random(&mut self) -> f32 {
         self.next_u32() as f32 / u32::MAX as f32
     }
 }
-impl<T: RandomNumberGenerator> Rando<f64> for T{
+impl<T: RandomNumberGenerator> Rando<f64> for T {
     fn random(&mut self) -> f64 {
         self.next_u32() as f64 / u32::MAX as f64
     }
 }
 
 ////
-const I32_MAX: u32 = i32::MAX as u32; 
-fn u32_to_i32(x:u32) -> i32 {
+const I32_MAX: u32 = i32::MAX as u32;
+fn u32_to_i32(x: u32) -> i32 {
     if x == u32::MAX {
-        return i32::MIN
+        return i32::MIN;
     }
     if x > I32_MAX {
-        -1 - (( x - I32_MAX - 1) as i32)
+        -1 - ((x - I32_MAX - 1) as i32)
     } else {
         x as i32
     }
-
 }
-const I64_MAX: u64 = i64::MAX as u64; 
-fn u64_to_i64(x:u64) -> i64 {
+const I64_MAX: u64 = i64::MAX as u64;
+fn u64_to_i64(x: u64) -> i64 {
     if x > I64_MAX {
-        -1 - (( x - I64_MAX - 1) as i64)
+        -1 - ((x - I64_MAX - 1) as i64)
     } else {
         x as i64
     }
@@ -66,11 +64,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn u32_to_i32_test(){
-        assert_eq!(i32::MIN , u32_to_i32(u32::MAX));
+    fn u32_to_i32_test() {
+        assert_eq!(i32::MIN, u32_to_i32(u32::MAX));
     }
     #[test]
-    fn u64_to_i64_test(){
+    fn u64_to_i64_test() {
         assert_eq!(i64::MIN, u64_to_i64(u64::MAX));
     }
 }

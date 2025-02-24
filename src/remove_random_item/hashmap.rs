@@ -4,15 +4,17 @@ use crate::RandomNumberGenerator;
 
 use super::RemoveRandomItem;
 
-impl<K: Eq + std::hash::Hash + Clone, V, R: RandomNumberGenerator> RemoveRandomItem<(K,V), R> for HashMap<K,V> {
-    fn remove_random_item(&mut self, rng:&mut R) -> Option<(K,V)> {
+impl<K: Eq + std::hash::Hash + Clone, V, R: RandomNumberGenerator> RemoveRandomItem<(K, V), R>
+    for HashMap<K, V>
+{
+    fn remove_random_item(&mut self, rng: &mut R) -> Option<(K, V)> {
         if self.is_empty() {
-            return None
+            return None;
         }
         let max = self.len() as usize;
-        let nth = rng.random_range(0, max); 
+        let nth = rng.random_range(0, max);
         let key = self.iter().nth(nth)?.0.clone();
-        let v= self.remove(&key)?;
+        let v = self.remove(&key)?;
         Some((key, v))
     }
 }
@@ -26,9 +28,6 @@ mod tests {
     fn remove_random_item() {
         let mut rng = Pcg32::new(crate::DEFAULT_STATE, crate::DEFAULT_STREAM);
         let mut a = HashMap::from([('c', 1_i32)]);
-        assert_eq!(
-            a.remove_random_item(&mut rng),
-            Some(('c', 1_i32))
-        )
+        assert_eq!(a.remove_random_item(&mut rng), Some(('c', 1_i32)))
     }
 }

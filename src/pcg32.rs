@@ -3,7 +3,6 @@ use crate::RandomNumberGenerator;
 // This is the default multiplier used by PCG for 64-bit state.
 const MULTIPLIER: u64 = 6364136223846793005;
 
-
 /// PCG32 - A 32-bit Pseudo-Random Number Generator.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -60,7 +59,6 @@ impl RandomNumberGenerator for Pcg32 {
     }
 }
 impl Pcg32 {
-
     /// Construct an instance compatible with PCG seed and stream.
     ///
     /// Note that the highest bit of the `stream` parameter is discarded

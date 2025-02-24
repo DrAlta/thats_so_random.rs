@@ -1,11 +1,11 @@
 use crate::RandomNumberGenerator;
 
-pub struct DummyRNG{
+pub struct DummyRNG {
     pub values: Vec<u32>,
     pub idx: usize,
 }
 
-impl RandomNumberGenerator for DummyRNG{
+impl RandomNumberGenerator for DummyRNG {
     fn advance(&mut self, delta: u64) {
         self.idx = (self.idx + delta as usize) & self.values.len();
     }
@@ -16,8 +16,11 @@ impl RandomNumberGenerator for DummyRNG{
         ret
     }
 }
-impl DummyRNG{
+impl DummyRNG {
     pub fn new<T: Into<Vec<u32>>>(values: T) -> Self {
-        Self { values: values.into(), idx: 0 }
+        Self {
+            values: values.into(),
+            idx: 0,
+        }
     }
 }

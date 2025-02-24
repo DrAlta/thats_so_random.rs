@@ -1,6 +1,6 @@
 use crate::RandomNumberGenerator;
 
-pub trait NormalDistribution<T>{
+pub trait NormalDistribution<T> {
     fn normal_distribution(&mut self) -> T;
 }
 
